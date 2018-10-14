@@ -13,7 +13,7 @@ function createScene() {
 
     scene = new THREE.Scene();
 
-    field = new Field(0,0,0)
+    field = new Field(0,0,0);
 
     scene.add(new THREE.AxisHelper(20));
     
