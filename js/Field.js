@@ -2,7 +2,6 @@
 
 class Field extends THREE.Object3D{
 
-
     constructor(x,y,z){
         super();
 
