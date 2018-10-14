@@ -4,6 +4,8 @@ var camera, scene, renderer, clock; // variaveis gerais relativas a animacao
 
 var camera1; // diferentes tipos de cameras
 
+var field;
+
 var geometry, material, mesh;
 
 var delta; // variavel relativa a passagem do tempo
