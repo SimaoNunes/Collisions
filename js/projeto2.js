@@ -2,7 +2,7 @@
 
 var camera, scene, renderer, clock; // variaveis gerais relativas a animacao
 
-var camera1; // diferentes tipos de cameras
+var camera1, camera2, camera3; // diferentes tipos de cameras
 
 var field;
 
@@ -15,11 +15,13 @@ function createScene() {
 
     scene = new THREE.Scene();
 
-    field = new Field(0,0,0);
+    field = new Field(0,0,0,20,40,44.7);
 
     scene.add(new THREE.AxisHelper(20));
 
     createCamera1();
+    createCamera2();
+    createCamera3();
 
     camera = camera1;
 
@@ -30,18 +32,45 @@ function createScene() {
 function createCamera1() {
     'use strict';
     camera1 = new THREE.OrthographicCamera(
-        window.innerWidth / - 10,
-        window.innerWidth/ 10,
-        (window.innerHeight / 10) - 10,
-        (window.innerHeight / - 10) - 10,
+        window.innerWidth,
+        window.innerWidth,
+        window.innerHeight,
+        window.innerHeight,
         0,
-        1000
+        50
     );
     
     camera1.position.x = 0;
     camera1.position.y = 30;
     camera1.position.z = 0;
 }
+
+
+function createCamera2() {
+    'use strict';
+    camera2 = new THREE.OrthographicCamera(
+        window.innerWidth,
+        window.innerWidth,
+        window.innerHeight,
+        window.innerHeight,
+        -20,
+        20
+    );
+    
+    camera2.position.x = 0;
+    camera2.position.y = 0;
+    camera2.position.z = 30;
+}
+
+
+function createCamera3() {
+    'use strict';
+    camera3 = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,1,1000);
+    camera3.position.x = 50;
+    camera3.position.y = 50;
+    camera3.position.z = 50;
+}
+
 
 function onKeyDown(e) {
     'use strict';
@@ -52,15 +81,35 @@ function onKeyDown(e) {
             if (node instanceof THREE.Mesh) {
                 node.material.wireframe = !node.material.wireframe;
             }
-        });   
+        });
+        break;
+    case 69:  //E
+    case 101: //e
+        scene.traverse(function (node) {
+            if (node instanceof THREE.AxisHelper) {
+                node.visible = !node.visible;
+            }
+        });
+        break;
+    case 49: //1
+        camera = camera1; 
+        break;
+    case 50: //2
+        camera = camera2; 
+        break; 
+    case 51: //3
+        camera = camera3;
+        break;
     }
 }
+
 
 function onKeyUp(e) {
     'use strict';
     switch (e.keyCode) {
     }
 }
+
 
 function onResize() {
     'use strict';
@@ -71,10 +120,12 @@ function onResize() {
     }
 }
 
+
 function render() {
     'use strict';
     renderer.render(scene, camera);
 }
+
 
 function init() {
     'use strict';
