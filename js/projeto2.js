@@ -18,7 +18,7 @@ function createScene() {
     field = new Field(0,0,0);
 
     scene.add(new THREE.AxisHelper(20));
-    
+
     createCamera1();
 
     camera = camera1;
