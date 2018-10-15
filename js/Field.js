@@ -2,14 +2,14 @@
 
 class Field extends THREE.Object3D{
 
-    addFieldBase(x,y,z,width,lenght){
-        geometry = new THREE.PlaneGeometry(lenght, width)
+    addFieldBase(x,y,z,widthX,lengthZ){
+        geometry = new THREE.BoxGeometry(widthX, 1, lengthZ)
         mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(x, y, z);
         this.add(mesh);
     }
 
-    constructor(x,y,z,h,width,lenght,height){
+    constructor(x,y,z,widthX,lengthZ){
         super();
 
         this.position.x = x;
@@ -19,14 +19,24 @@ class Field extends THREE.Object3D{
         'use strict'
 
         material = new THREE.MeshBasicMaterial({color: 0x188e1a, wireframe: false});
+        this.addFieldBase(x,y,z,widthX,lengthZ);
 
-        this.addFieldBase(x,y,z,width,lenght);
-        //this.add(new Wall(x,y,z, height, length))
+        var wall = new Wall(x,y,z, widthX, lengthZ);
+        this.add(wall)
         //this.add(new THREE.AxisHelper(10));
     }    
 }
 
 class Wall extends THREE.Object3D{
+
+    addWall(x,y,z,height,length){
+        geometry = new THREE.BoxGeometry(25, 1, 20)
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(x, y, z);
+        this.add(mesh);
+    }
+
+
     constructor(x, y, z, height, length){
         super();
 
@@ -37,9 +47,9 @@ class Wall extends THREE.Object3D{
         'use strict';
         
         material = new THREE.MeshBasicMaterial({color: 0x188e1a, wireframe: false});
-        geometry = new THREE.PlaneGeometry(height, length)
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(x, y, z);
+        this.addWall(x,y,z,height,length);
+        
+
         this.add(mesh);
     }
 }

@@ -15,7 +15,7 @@ function createScene() {
 
     scene = new THREE.Scene();
 
-    field = new Field(0,0,0,20,40,44.7);
+    field = new Field(0,0,0,40,40);
 
     scene.add(new THREE.AxisHelper(20));
 
@@ -23,7 +23,7 @@ function createScene() {
     createCamera2();
     createCamera3();
 
-    camera = camera1;
+    camera = camera3;
 
     scene.add(camera);
     scene.add(field);
@@ -36,7 +36,7 @@ function createCamera1() {
         window.innerWidth,
         window.innerHeight,
         window.innerHeight,
-        0,
+        -50,
         50
     );
     
