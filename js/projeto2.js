@@ -15,7 +15,7 @@ function createScene() {
 
     scene = new THREE.Scene();
 
-    field = new Field(0,0,0,80,40);
+    field = new Field(0,0,0,80,40);     //(0,0,0) -> posição || (x,y) -> comprimento e largura
 
     scene.add(new THREE.AxisHelper(20));
 
