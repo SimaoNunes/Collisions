@@ -17,7 +17,7 @@ function createScene() {
 
     field = new Field(0,0,0,80,40);     //(0,0,0) -> posição || (x,y) -> comprimento e largura
 
-    scene.add(new THREE.AxisHelper(20));
+    scene.add(new THREE.AxisHelper(30));
 
     createCamera1();
     createCamera2();
@@ -32,12 +32,12 @@ function createScene() {
 function createCamera1() {
     'use strict';
     camera1 = new THREE.OrthographicCamera(
-        window.innerWidth,
-        window.innerWidth,
-        window.innerHeight,
-        window.innerHeight,
-        -50,
-        50
+        -window.innerWidth/20,
+        window.innerWidth/20,
+        window.innerHeight/20,
+        -window.innerHeight/20,
+        50,
+        -50
     );
     
     camera1.position.x = 0;
@@ -49,10 +49,10 @@ function createCamera1() {
 function createCamera2() {
     'use strict';
     camera2 = new THREE.OrthographicCamera(
-        window.innerWidth,
-        window.innerWidth,
-        window.innerHeight,
-        window.innerHeight,
+        -window.innerWidth/20,
+        window.innerWidth/20,
+        window.innerHeight/20,
+        -window.innerHeight/20,
         -20,
         20
     );

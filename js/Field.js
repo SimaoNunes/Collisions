@@ -22,12 +22,14 @@ class Field extends THREE.Object3D{
 
         var height = (Math.sqrt(Math.pow(length,2) + Math.pow(width,2)))/10;
 
+        var grrossa = length / 40;
+
         this.addFieldBase(x,y,z,length,width);
 
-        var wallLeft = new Wall(-(length/2)+1, y, z, width, 2, height);
-        var wallTop = new Wall(x, y, -(width/2)+1, 2, length, height);
-        var wallRight = new Wall((length/2)+1, y, z, width, 2, height);
-        var wallBottom = new Wall(x, y, (width/2)+1, 2, length, height);
+        var wallLeft = new Wall(-(length/2)-(grrossa/2), y, z, width, grrossa, height);
+        var wallTop = new Wall(x, y, -(width/2)-(grrossa/2), grrossa, length, height);
+        var wallRight = new Wall((length/2)+(grrossa/2), y, z, width, grrossa, height);
+        var wallBottom = new Wall(x, y, (width/2)+(grrossa/2), grrossa, length, height);
 
         this.add(wallLeft);
         this.add(wallTop);
@@ -52,7 +54,6 @@ class Wall extends THREE.Object3D{
         material = new THREE.MeshBasicMaterial({color: 0x188e1a, wireframe: true});
         geometry = new THREE.BoxGeometry(width, height, length)
         mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(x, (y+height/2)+0.5, z);
         this.add(mesh);
     }
 }
