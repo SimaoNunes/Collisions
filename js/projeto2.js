@@ -13,6 +13,7 @@ var geometry, material, mesh;
 var delta; // variavel relativa a passagem do tempo
 
 
+
 function createScene() {
     'use strict';
 
@@ -25,22 +26,26 @@ function createScene() {
 
     diameter = (Math.sqrt(Math.pow(length,2) + Math.pow(width,2)))/10;
 
-    var i, randomX, randomZ;
+    var i, position, collision;
 
     balls = [];
 
-    var x;
+    var paintJob;
 
     for(i=0; i<10; i++){
-        if(i==0){
-            x = 0xff0000;
+
+        if(i == 0){paintJob = 0xff0000;}
+        else{paintJob = 0x9b9da0}
+        
+        position = getCoordinates(length, width, diameter);
+        collision = verifyCollisionOnStart(position, diameter);
+
+        while(collision){
+            position = getCoordinates(length, width, diameter);
+            collision = verifyCollisionOnStart(position, diameter);
         }
-        else{
-            x = 0x9b9da0;
-        }
-        randomX = Math.floor(Math.random()*(length-diameter)) - (length-diameter)/2;
-        randomZ = Math.floor(Math.random()*(width-diameter)) - (width-diameter)/2;
-        balls[i] = new Ball(randomX,randomZ,diameter,x);
+        
+        balls[i] = new Ball(position[0],position[1],diameter,paintJob);
         scene.add(balls[i]);
     }
 
@@ -57,6 +62,7 @@ function createScene() {
 
     balls[0].add(camera3);
 }
+
 
 
 function createCamera1() {
@@ -89,7 +95,7 @@ function createCamera3() {
     camera3 = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,1,1000);
 
     camera3.position.x = 0;
-    camera3.position.y = diameter + diameter/4;
+    camera3.position.y = diameter + diameter/2;
     camera3.position.z = 0;
 }
 
@@ -143,6 +149,31 @@ function onResize() {
 }
 
 
+function getCoordinates(length,width,diameter){
+    var randomX, randomZ;
+    randomX = Math.floor(Math.random()*(length-diameter)) - (length-diameter)/2;
+    randomZ = Math.floor(Math.random()*(width-diameter)) - (width-diameter)/2; 
+    return [randomX, randomZ];
+}
+
+
+function verifyCollisionOnStart(position, diameter){
+    var i,x,z,res,aux;
+
+    x   = position[0];
+    z   = position[1];
+    res = diameter**2;
+    
+    for(i=0; i<balls.length; i++){
+        aux = (x-balls[i].position.x)**2 + (z-balls[i].position.z)**2;
+        if(res >= aux){
+            return true;
+        }
+    }
+    return false;
+}
+
+
 function render() {
     'use strict';
     renderer.render(scene, camera);
@@ -172,8 +203,9 @@ function animate() {
     // UPDATE //
 
     if(camera == camera3){
-        balls[0].children[2].position.x = -(3*diameter)/4;
+        balls[0].children[2].position.x = -diameter;
         balls[0].children[2].position.z = 0;
+        camera.lookAt(balls[0].position);
     }
 
     else{
