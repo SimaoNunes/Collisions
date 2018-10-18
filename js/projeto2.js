@@ -11,6 +11,29 @@ var geometry, material, mesh;
 var delta; // variavel relativa a passagem do tempo
 
 
+function getCoordinates(length,width,diameter){
+    var randomX, randomZ;
+    randomX = Math.floor(Math.random()*(length-diameter)) - (length-diameter)/2;
+    randomZ = Math.floor(Math.random()*(width-diameter)) - (width-diameter)/2; 
+    return [randomX, randomZ];
+}
+
+function verifyCollision(position, diameter){
+    var i,x,z,res,aux;
+
+    x   = position[0];
+    z   = position[1];
+    res = diameter**2;
+    
+    for(i=0; i<balls.length; i++){
+        aux = (x-balls[i].position.x)**2 + (z-balls[i].position.z)**2;
+        if(res >= aux){
+            return true;
+        }
+    }
+    return false;
+}
+
 function createScene() {
     'use strict';
 
@@ -23,14 +46,21 @@ function createScene() {
 
     var diameter = (Math.sqrt(Math.pow(length,2) + Math.pow(width,2)))/10;
 
-    var i, randomX, randomZ;
+    var i, position, collision;
 
     balls = [];
 
     for(i=0; i<10; i++){
-        randomX = Math.floor(Math.random()*(length-diameter)) - (length-diameter)/2;
-        randomZ = Math.floor(Math.random()*(width-diameter)) - (width-diameter)/2;
-        balls[i] = new Ball(randomX,randomZ,diameter,0x9b9da0);
+        
+        position = getCoordinates(length, width, diameter);
+        collision = verifyCollision(position, diameter);
+
+        while(collision){
+            position = getCoordinates(length, width, diameter);
+            collision = verifyCollision(position, diameter);
+        }
+        
+        balls[i] = new Ball(position[0],position[1],diameter,0x9b9da0);
         scene.add(balls[i]);
     }
 
@@ -45,6 +75,7 @@ function createScene() {
     scene.add(camera);
     scene.add(field);
 }
+
 
 
 function createCamera1() {
