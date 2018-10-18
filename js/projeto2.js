@@ -17,8 +17,8 @@ function createScene() {
 
     scene = new THREE.Scene();
 
-    var length = 80;
-    var width = 40;
+    var length = 90;
+    var width = 45;
 
     field = new Field(0,0,0,length,width);     //(0,0,0) -> posição || (x,y) -> comprimento e largura
 
@@ -28,14 +28,14 @@ function createScene() {
 
     balls = [];
 
-    for(i=0; i<=10; i++){
-        randomX = Math.floor(Math.random()*length) - length/2;
-        randomZ = Math.floor(Math.random()*width) - width/2;
+    for(i=0; i<10; i++){
+        randomX = Math.floor(Math.random()*(length-diameter)) - (length-diameter)/2;
+        randomZ = Math.floor(Math.random()*(width-diameter)) - (width-diameter)/2;
         balls[i] = new Ball(randomX,randomZ,diameter,0x9b9da0);
         scene.add(balls[i]);
     }
 
-    scene.add(new THREE.AxisHelper(10));
+    //scene.add(new THREE.AxisHelper(10));
 
     createCamera1();
     createCamera2();
@@ -55,8 +55,8 @@ function createCamera1() {
         window.innerWidth/20,
         window.innerHeight/20,
         -window.innerHeight/20,
-        50,
-        -50
+        -50,
+        50
     );
     camera1.position.x = 0;
     camera1.position.y = 30;

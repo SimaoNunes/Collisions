@@ -26,9 +26,9 @@ class Field extends THREE.Object3D{
 
         this.addFieldBase(x,y,z,length,width);
 
-        var wallLeft = new Wall(-(length/2)-(grrossa/2), y, z, width+grrossa, grrossa, height);
+        var wallLeft = new Wall(-(length/2)-(grrossa/2), y, z, width+grrossa*2, grrossa, height);
         var wallTop = new Wall(x, y, -(width/2)-(grrossa/2), grrossa, length, height);
-        var wallRight = new Wall((length/2)+(grrossa/2), y, z, width+grrossa, grrossa, height);
+        var wallRight = new Wall((length/2)+(grrossa/2), y, z, width+grrossa*2, grrossa, height);
         var wallBottom = new Wall(x, y, (width/2)+(grrossa/2), grrossa, length, height);
 
         this.add(wallLeft);

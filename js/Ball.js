@@ -16,6 +16,6 @@ class Ball extends THREE.Object3D{
         mesh = new THREE.Mesh(geometry, material);
         this.add(mesh);
 
-        //this.add(new THREE.AxisHelper(10));
+        this.add(new THREE.AxisHelper(8));
     }
 }
