@@ -6,6 +6,8 @@ var camera1, camera2, camera3; // diferentes tipos de cameras
 
 var field, balls;
 
+var diameter; // diametro da bola (altura das paredes)
+
 var geometry, material, mesh;
 
 var delta; // variavel relativa a passagem do tempo
@@ -21,16 +23,24 @@ function createScene() {
 
     field = new Field(0,0,0,length,width);     //(0,0,0) -> posição || (x,y) -> comprimento e largura
 
-    var diameter = (Math.sqrt(Math.pow(length,2) + Math.pow(width,2)))/10;
+    diameter = (Math.sqrt(Math.pow(length,2) + Math.pow(width,2)))/10;
 
     var i, randomX, randomZ;
 
     balls = [];
 
+    var x;
+
     for(i=0; i<10; i++){
+        if(i==0){
+            x = 0xff0000;
+        }
+        else{
+            x = 0x9b9da0;
+        }
         randomX = Math.floor(Math.random()*(length-diameter)) - (length-diameter)/2;
         randomZ = Math.floor(Math.random()*(width-diameter)) - (width-diameter)/2;
-        balls[i] = new Ball(randomX,randomZ,diameter,0x9b9da0);
+        balls[i] = new Ball(randomX,randomZ,diameter,x);
         scene.add(balls[i]);
     }
 
@@ -44,6 +54,8 @@ function createScene() {
 
     scene.add(camera);
     scene.add(field);
+
+    balls[0].add(camera3);
 }
 
 
@@ -74,17 +86,11 @@ function createCamera2() {
 
 function createCamera3() {
     'use strict';
-    camera3 = new THREE.OrthographicCamera(
-        -window.innerWidth/20,
-        window.innerWidth/20,
-        window.innerHeight/20,
-        -window.innerHeight/20,
-        -50,
-        50
-    );
+    camera3 = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,1,1000);
+
     camera3.position.x = 0;
-    camera3.position.y = 0;
-    camera3.position.z = 50;
+    camera3.position.y = diameter + diameter/4;
+    camera3.position.z = 0;
 }
 
 
@@ -163,9 +169,20 @@ function init() {
 function animate() {
     'use strict';
 
-    render();
+    // UPDATE //
 
-    camera.lookAt( scene.position );
+    if(camera == camera3){
+        balls[0].children[2].position.x = -(3*diameter)/4;
+        balls[0].children[2].position.z = 0;
+    }
+
+    else{
+        camera.lookAt(scene.position);
+    }
+
+    // DISPLAY //
+
+    render();
 
     requestAnimationFrame(animate);
 }
