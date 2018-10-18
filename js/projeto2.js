@@ -11,7 +11,6 @@ var geometry, material, mesh;
 var delta; // variavel relativa a passagem do tempo
 
 
-
 function createScene() {
     'use strict';
 
