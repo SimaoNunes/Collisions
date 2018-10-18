@@ -24,8 +24,16 @@ function createScene() {
 
     var diameter = (Math.sqrt(Math.pow(length,2) + Math.pow(width,2)))/10;
 
-    var ball1 = new Ball(0,0,0,diameter,0xf44242)
-    var ball2 = new Ball(10,0,0,diameter,0x0029ff)
+    var i, randomX, randomZ;
+
+    balls = [];
+
+    for(i=0; i<=10; i++){
+        randomX = Math.floor(Math.random()*80) - 40;
+        randomZ = Math.floor(Math.random()*40) - 20;
+        balls[i] = new Ball(randomX,randomZ,diameter,0x9b9da0);
+        scene.add(balls[i]);
+    }
 
     scene.add(new THREE.AxisHelper(10));
 
@@ -33,12 +41,10 @@ function createScene() {
     createCamera2();
     createCamera3();
 
-    camera = camera2;
+    camera = camera1;
 
     scene.add(camera);
     scene.add(field);
-    scene.add(ball1);
-    scene.add(ball2);
 }
 
 

@@ -2,7 +2,7 @@
 
 class Ball extends THREE.Object3D{
 
-    constructor(x,y,z,diameter,paint){
+    constructor(x,z,diameter,paint){
         super();
 
         this.position.x = x;
