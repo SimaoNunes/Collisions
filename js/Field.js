@@ -44,7 +44,7 @@ class Wall extends THREE.Object3D{
         super();
 
         this.position.x = x;
-        this.position.y = y;
+        this.position.y = (y+height/2)+0.5;
         this.position.z = z;
     
         'use strict';
@@ -52,7 +52,6 @@ class Wall extends THREE.Object3D{
         material = new THREE.MeshBasicMaterial({color: 0x188e1a, wireframe: true});
         geometry = new THREE.BoxGeometry(width, height, length)
         mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(x, (y+height/2)+0.5, z);
         this.add(mesh);
     }
 }
