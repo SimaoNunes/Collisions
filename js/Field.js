@@ -18,16 +18,18 @@ class Field extends THREE.Object3D{
     
         'use strict'
 
-        material = new THREE.MeshBasicMaterial({color: 0x188e1a, wireframe: true});
+        material = new THREE.MeshBasicMaterial({color: 0x0d4c02, wireframe: true});
 
         var height = (Math.sqrt(Math.pow(length,2) + Math.pow(width,2)))/10;
 
+        var grrossa = length / 40;
+
         this.addFieldBase(x,y,z,length,width);
 
-        var wallLeft = new Wall(-(length/2)+1, y, z, width, 2, height);
-        var wallTop = new Wall(x, y, -(width/2)+1, 2, length, height);
-        var wallRight = new Wall((length/2)+1, y, z, width, 2, height);
-        var wallBottom = new Wall(x, y, (width/2)+1, 2, length, height);
+        var wallLeft = new Wall(-(length/2)-(grrossa/2), y, z, width+grrossa+2, grrossa, height);
+        var wallTop = new Wall(x, y, -(width/2)-(grrossa/2), grrossa, length, height);
+        var wallRight = new Wall((length/2)+(grrossa/2), y, z, width+grrossa+2, grrossa, height);
+        var wallBottom = new Wall(x, y, (width/2)+(grrossa/2), grrossa, length, height);
 
         this.add(wallLeft);
         this.add(wallTop);
@@ -44,12 +46,12 @@ class Wall extends THREE.Object3D{
         super();
 
         this.position.x = x;
-        this.position.y = (y+height/2)+0.5;
+        this.position.y = (height/2)+0.5;
         this.position.z = z;
     
         'use strict';
         
-        material = new THREE.MeshBasicMaterial({color: 0x188e1a, wireframe: true});
+        material = new THREE.MeshBasicMaterial({color: 0xf2b02b, wireframe: true});
         geometry = new THREE.BoxGeometry(width, height, length)
         mesh = new THREE.Mesh(geometry, material);
         this.add(mesh);

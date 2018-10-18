@@ -4,42 +4,60 @@ var camera, scene, renderer, clock; // variaveis gerais relativas a animacao
 
 var camera1, camera2, camera3; // diferentes tipos de cameras
 
-var field;
+var field, balls;
 
 var geometry, material, mesh;
 
 var delta; // variavel relativa a passagem do tempo
+
+
 
 function createScene() {
     'use strict';
 
     scene = new THREE.Scene();
 
-    field = new Field(0,0,0,80,40);     //(0,0,0) -> posição || (x,y) -> comprimento e largura
+    var length = 80;
+    var width = 40;
 
-    scene.add(new THREE.AxisHelper(20));
+    field = new Field(0,0,0,length,width);     //(0,0,0) -> posição || (x,y) -> comprimento e largura
+
+    var diameter = (Math.sqrt(Math.pow(length,2) + Math.pow(width,2)))/10;
+
+    var i, randomX, randomZ;
+
+    balls = [];
+
+    for(i=0; i<=10; i++){
+        randomX = Math.floor(Math.random()*80) - 40;
+        randomZ = Math.floor(Math.random()*40) - 20;
+        balls[i] = new Ball(randomX,randomZ,diameter,0x9b9da0);
+        scene.add(balls[i]);
+    }
+
+    scene.add(new THREE.AxisHelper(10));
 
     createCamera1();
     createCamera2();
     createCamera3();
 
-    camera = camera3;
+    camera = camera1;
 
     scene.add(camera);
     scene.add(field);
 }
 
+
 function createCamera1() {
     'use strict';
     camera1 = new THREE.OrthographicCamera(
-        window.innerWidth,
-        window.innerWidth,
-        window.innerHeight,
-        window.innerHeight,
-        -50,
-        50
+        -window.innerWidth/20,
+        window.innerWidth/20,
+        window.innerHeight/20,
+        -window.innerHeight/20,
+        50,
+        -50
     );
-    
     camera1.position.x = 0;
     camera1.position.y = 30;
     camera1.position.z = 0;
@@ -48,26 +66,25 @@ function createCamera1() {
 
 function createCamera2() {
     'use strict';
-    camera2 = new THREE.OrthographicCamera(
-        window.innerWidth,
-        window.innerWidth,
-        window.innerHeight,
-        window.innerHeight,
-        -20,
-        20
-    );
-    
-    camera2.position.x = 0;
-    camera2.position.y = 0;
-    camera2.position.z = 30;
+    camera2 = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,1,1000);
+    camera2.position.x = 50;
+    camera2.position.y = 50;
+    camera2.position.z = 50;
 }
 
 
 function createCamera3() {
     'use strict';
-    camera3 = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,1,1000);
-    camera3.position.x = 50;
-    camera3.position.y = 50;
+    camera3 = new THREE.OrthographicCamera(
+        -window.innerWidth/20,
+        window.innerWidth/20,
+        window.innerHeight/20,
+        -window.innerHeight/20,
+        -50,
+        50
+    );
+    camera3.position.x = 0;
+    camera3.position.y = 0;
     camera3.position.z = 50;
 }
 
