@@ -17,8 +17,8 @@ function createScene() {
 
     scene = new THREE.Scene();
 
-    var length = 60;
-    var width = 30;
+    var length = 80;
+    var width = 40;
 
     field = new Field(0,0,0,length,width);     //(0,0,0) -> posição || (x,y) -> comprimento e largura
 
