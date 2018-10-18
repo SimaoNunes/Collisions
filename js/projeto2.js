@@ -4,11 +4,13 @@ var camera, scene, renderer, clock; // variaveis gerais relativas a animacao
 
 var camera1, camera2, camera3; // diferentes tipos de cameras
 
-var field, ball;
+var field, balls;
 
 var geometry, material, mesh;
 
 var delta; // variavel relativa a passagem do tempo
+
+
 
 function createScene() {
     'use strict';
@@ -22,7 +24,8 @@ function createScene() {
 
     var diameter = (Math.sqrt(Math.pow(length,2) + Math.pow(width,2)))/10;
 
-    ball = new Ball(0,0,0,diameter)
+    var ball1 = new Ball(0,0,0,diameter,0xf44242)
+    var ball2 = new Ball(10,0,0,diameter,0x0029ff)
 
     scene.add(new THREE.AxisHelper(10));
 
@@ -34,8 +37,10 @@ function createScene() {
 
     scene.add(camera);
     scene.add(field);
-    scene.add(ball);
+    scene.add(ball1);
+    scene.add(ball2);
 }
+
 
 function createCamera1() {
     'use strict';
@@ -47,7 +52,6 @@ function createCamera1() {
         50,
         -50
     );
-    
     camera1.position.x = 0;
     camera1.position.y = 30;
     camera1.position.z = 0;
@@ -63,7 +67,6 @@ function createCamera2() {
 }
 
 
-
 function createCamera3() {
     'use strict';
     camera3 = new THREE.OrthographicCamera(
@@ -74,7 +77,6 @@ function createCamera3() {
         -50,
         50
     );
-    
     camera3.position.x = 0;
     camera3.position.y = 0;
     camera3.position.z = 50;

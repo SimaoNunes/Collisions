@@ -2,7 +2,7 @@
 
 class Ball extends THREE.Object3D{
 
-    constructor(x,y,z,diameter){
+    constructor(x,y,z,diameter,paint){
         super();
 
         this.position.x = x;
@@ -11,7 +11,7 @@ class Ball extends THREE.Object3D{
     
         'use strict'
 
-        material = new THREE.MeshBasicMaterial({color: 0xf44242, wireframe: true});
+        material = new THREE.MeshBasicMaterial({color: paint, wireframe: true});
         geometry = new THREE.SphereGeometry(diameter/2)
         mesh = new THREE.Mesh(geometry, material);
         this.add(mesh);
