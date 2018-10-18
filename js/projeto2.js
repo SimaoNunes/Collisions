@@ -17,8 +17,8 @@ function createScene() {
 
     scene = new THREE.Scene();
 
-    var length = 80;
-    var width = 40;
+    var length = 60;
+    var width = 30;
 
     field = new Field(0,0,0,length,width);     //(0,0,0) -> posição || (x,y) -> comprimento e largura
 
@@ -29,8 +29,8 @@ function createScene() {
     balls = [];
 
     for(i=0; i<=10; i++){
-        randomX = Math.floor(Math.random()*80) - 40;
-        randomZ = Math.floor(Math.random()*40) - 20;
+        randomX = Math.floor(Math.random()*length) - length/2;
+        randomZ = Math.floor(Math.random()*width) - width/2;
         balls[i] = new Ball(randomX,randomZ,diameter,0x9b9da0);
         scene.add(balls[i]);
     }
