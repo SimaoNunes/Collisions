@@ -12,6 +12,11 @@ var geometry, material, mesh;
 
 var delta; // variavel relativa a passagem do tempo
 
+var ballsLength = 10;   //numero de bolas
+
+var direction;
+
+
 
 
 function createScene() {
@@ -30,12 +35,12 @@ function createScene() {
 
     balls = [];
 
-    var paintJob;
+    var paint, speed;
 
-    for(i=0; i<1; i++){
+    for(i=0; i  < ballsLength; i++){
 
-        if(i == 0){paintJob = 0xff0000;}
-        else{paintJob = 0x9b9da0}
+        if(i == 0){paint = 0xff0000;}
+        else{paint = 0x9b9da0}
         
         position = getRandomCoordinates(length, width);
         collision = verifyCollisionOnStart(position);
@@ -45,9 +50,20 @@ function createScene() {
             collision = verifyCollisionOnStart(position);
         }
         
-        balls[i] = new Ball(position[0],position[1],diameter,paintJob);
+        speed = Math.random()*15+2;
+
+        balls[i] = new Ball(position[0],position[1],diameter,paint,speed);
+        
         scene.add(balls[i]);
-        balls[i].rotateY(Math.random()*Math.PI*2);
+
+        var angle = Math.random()*Math.PI*2;
+
+        var axis = new THREE.Vector3(0,1,0);
+
+        balls[i].userData.direction = balls[i].userData.direction.applyAxisAngle(axis,angle);
+        
+        balls[i].rotateY(angle);
+        
     }
 
     createCamera1();
@@ -59,7 +75,6 @@ function createScene() {
     scene.add(camera);
     scene.add(field);
 
-    balls[0].add(camera3);
     scene.traverse(function (node) {
         if (node instanceof THREE.AxisHelper) {
             node.visible = !node.visible;
@@ -97,10 +112,7 @@ function createCamera2() {
 function createCamera3() {
     'use strict';
     camera3 = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,1,1000);
-
-    camera3.position.x = 0;
     camera3.position.y = diameter + diameter/2;
-    camera3.position.z = 0;
 }
 
 
@@ -167,9 +179,8 @@ function verifyCollisionOnStart(position){
     x   = position[0];
     z   = position[1];
     radiusSum  = diameter**2;
-    ballsLength = balls.length;
     
-    for(i=0; i<ballsLength; i++){
+    for(i=0; i<balls.length; i++){
         centerDistance = (x-balls[i].position.x)**2 + (z-balls[i].position.z)**2;
          if( radiusSum  >= centerDistance){
             return true;
@@ -179,17 +190,13 @@ function verifyCollisionOnStart(position){
 }
 
 function hasCollision(){
-    var i;
+    var i, radius;
+    radius = diameter/2;
 
-    ballsLength = balls.length;
-    
     for(i=0; i<ballsLength; i++){
-        if(balls[i].position.x >= length/2 - diameter/2 ||
-            balls[i].position.z >= width/2 - diameter/2 ||
-            balls[i].position.x <= -length/2 + diameter/2 ||
-            balls[i].position.z <= -width/2 + diameter/2){
-                balls[i].userData.velocity = 0;
-            }
+        if(Math.abs(balls[i].position.x) >= (length/2)-radius || Math.abs(balls[i].position.z) >= (width/2)-radius){
+            balls[i].userData.velocity = 0;
+        }
     }
 }
 
@@ -207,8 +214,13 @@ function init() {
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-    
+
+    clock = new THREE.Clock();
+
     createScene();
+
+    camera3.position.x = balls[0].position.x-diameter*1.5*balls[0].userData.direction.getComponent(0);
+    camera3.position.z = balls[0].position.z-diameter*1.5*balls[0].userData.direction.getComponent(2);;
 
     render();
 
@@ -222,25 +234,29 @@ function animate() {
 
     var i;
 
+    delta = clock.getDelta();
+
+
     // UPDATE //
 
-    if(camera == camera3){
-        balls[0].children[2].position.x = -diameter*1.5;
-        balls[0].children[2].position.z = 0;
-        camera.lookAt(scene.position);
+    for(i=0; i < ballsLength; i++){
+        balls[i].rotation.z -= (balls[i].userData.velocity*(delta))/(diameter/2);
+        balls[i].position.x += balls[i].userData.velocity*(delta)*balls[i].userData.direction.getComponent(0);
+        balls[i].position.z += balls[i].userData.velocity*(delta)*balls[i].userData.direction.getComponent(2);
     }
+    
 
+    if(camera == camera3){
+        camera3.position.x += balls[0].userData.velocity*(delta)*balls[0].userData.direction.getComponent(0);
+        camera3.position.z += balls[0].userData.velocity*(delta)*balls[0].userData.direction.getComponent(2);
+        camera.lookAt(balls[0].position);
+    }
     else{
         camera.lookAt(scene.position);
     }
 
-    ballsLength = balls.length;
-
-    for(i=0; i<ballsLength; i++){
-        balls[i].translateX(balls[i].userData.velocity);
-    }
-
     hasCollision();
+
 
     // DISPLAY //
 
