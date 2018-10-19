@@ -12,6 +12,8 @@ var geometry, material, mesh;
 
 var delta; // variavel relativa a passagem do tempo
 
+var ballsLength = 10;   //numero de bolas
+
 
 
 
@@ -33,7 +35,7 @@ function createScene() {
 
     var paintJob;
 
-    for(i=0; i<10; i++){
+    for(i=0; i  < ballsLength; i++){
 
         if(i == 0){paintJob = 0xff0000;}
         else{paintJob = 0x9b9da0}
@@ -171,9 +173,8 @@ function verifyCollisionOnStart(position){
     x   = position[0];
     z   = position[1];
     radiusSum  = diameter**2;
-    ballsLength = balls.length;
     
-    for(i=0; i<ballsLength; i++){
+    for(i=0; i<balls.length; i++){
         centerDistance = (x-balls[i].position.x)**2 + (z-balls[i].position.z)**2;
          if( radiusSum  >= centerDistance){
             return true;
@@ -183,15 +184,13 @@ function verifyCollisionOnStart(position){
 }
 
 function hasCollision(){
-    var i;
+    var i, radius;
+    radius = diameter/2;
 
-    ballsLength = balls.length;
-    
     for(i=0; i<ballsLength; i++){
-        if(length/2 - diameter/2 >= balls[i].position.x >= - length/2 + diameter/2 ||
-            width/2 - diameter/2 >= balls[i].position.z >= - width/2 + diameter/2){
-                balls[i].userData.velocity = 0;
-            }
+        if(Math.abs(balls[i].position.x) >= (length/2)-radius || Math.abs(balls[i].position.z) >= (width/2)-radius){
+            balls[i].userData.velocity = 0;
+        }
     }
 }
 
@@ -238,9 +237,11 @@ function animate() {
 
     ballsLength = balls.length;
 
-    for(i=0; i<ballsLength; i++){
+    for(i=0; i < ballsLength; i++){
         balls[i].translateX(balls[i].userData.velocity);
     }   
+
+    hasCollision();
 
     // DISPLAY //
 
