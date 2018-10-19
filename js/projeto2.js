@@ -184,8 +184,10 @@ function hasCollision(){
     ballsLength = balls.length;
     
     for(i=0; i<ballsLength; i++){
-        if(length/2 - diameter/2 >= balls[i].position.x >= - length/2 + diameter/2 ||
-            width/2 - diameter/2 >= balls[i].position.z >= - width/2 + diameter/2){
+        if(balls[i].position.x >= length/2 - diameter/2 ||
+            balls[i].position.z >= width/2 - diameter/2 ||
+            balls[i].position.x <= -length/2 + diameter/2 ||
+            balls[i].position.z <= -width/2 + diameter/2){
                 balls[i].userData.velocity = 0;
             }
     }
@@ -237,6 +239,8 @@ function animate() {
     for(i=0; i<ballsLength; i++){
         balls[i].translateX(balls[i].userData.velocity);
     }
+
+    hasCollision();
 
     // DISPLAY //
 
