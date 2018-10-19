@@ -185,53 +185,22 @@ function verifyCollisionOnStart(position){
 
 function hasCollision(){
     var i, radius,pi,x,z;
-    
     pi = Math.PI;
     radius = diameter/2;
-
     for(i=0; i<ballsLength; i++){
-
-        ball   = balls[i];
-        angle  = ball.userData.angle;
-        x      = ball.position.x;
-        z      = ball.position.z;
+        // variaveis auxiliares
+        angle  = balls[i].userData.angle;
+        x      = balls[i].position.x;
+        z      = balls[i].position.z;
         limitZ = (width/2)-radius;
         limitX = (length/2)-radius;
-
-        // limite superior
-        if( z <= -1*limitZ || z >= limitZ ){
-            if( 0 <= angle && angle <= pi){
-                balls[i].rotateY(-2*angle);
-                balls[i].userData.angle = 2*pi-angle;
-            }
+        // limite superior e inferior
+        if( Math.abs(z) >= limitZ ){
+            balls[i].userData.direction[1] = -balls[i].userData.direction[1];
         }
-        // limite inferior
-        if( z >= limitZ){
-            if( pi <= angle && angle <= 2*pi){
-                balls[i].rotateY(2*(2*pi - angle));
-                balls[i].userData.angle = 2*pi - angle;
-            }
-        }
-        //limite direito
-        if( x >= limitX){
-            balls[i].rotateY(pi-2*angle);
-            if( 0 <= angle && angle <= pi/2 ){
-                balls[i].userData.angle = pi - angle;
-            }
-            if((3/4)*pi <= angle && angle <= 2*pi){
-                balls[i].userData.angle = 2*pi-angle+pi;
-            }
-        }
-        //limite esquerdo
-        if( x <= -1*limitX){
-            if( angle <= pi ){
-                balls[i].rotateY(pi-2*angle);
-                balls[i].userData.angle = pi - angle;
-            }
-            if( pi <= angle){
-                balls[i].rotateY(-2*angle+pi);
-                balls[i].userData.angle = 2*pi - angle + pi;
-            }
+        //limite direito e esquerdo
+        if( Math.abs(x) >= limitX){
+            balls[i].userData.direction[0] = -balls[i].userData.direction[0];
         }
     }
 }
@@ -281,7 +250,9 @@ function animate() {
     ballsLength = balls.length;
 
     for(i=0; i < ballsLength; i++){
-        balls[i].translateX(balls[i].userData.velocity);
+        // balls[i].translateX(balls[i].userData.velocity);
+        balls[i].position.x = balls[i].position.x + balls[i].userData.direction[0]*balls[i].userData.velocity;
+        balls[i].position.z = balls[i].position.z + balls[i].userData.direction[1]*balls[i].userData.velocity;
     }   
 
     hasCollision();
