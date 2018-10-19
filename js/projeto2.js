@@ -6,7 +6,7 @@ var camera1, camera2, camera3; // diferentes tipos de cameras
 
 var field, balls;
 
-var diameter; // diametro da bola (altura das paredes)
+var length, width, diameter; // comprimento e largura do campo e diametro da bola (altura das paredes)
 
 var geometry, material, mesh;
 
@@ -20,8 +20,8 @@ function createScene() {
 
     scene = new THREE.Scene();
 
-    var length = 90;
-    var width = 45;
+    length = 90;
+    width = 45;
 
     field = new Field(0,0,0,length,width);     //(0,0,0) -> posição || (x,y) -> comprimento e largura
 
@@ -33,17 +33,17 @@ function createScene() {
 
     var paintJob;
 
-    for(i=0; i<10; i++){
+    for(i=0; i<1; i++){
 
         if(i == 0){paintJob = 0xff0000;}
         else{paintJob = 0x9b9da0}
         
-        position = getCoordinates(length, width, diameter);
-        collision = verifyCollisionOnStart(position, diameter);
+        position = getRandomCoordinates(length, width);
+        collision = verifyCollisionOnStart(position);
 
         while(collision){
-            position = getCoordinates(length, width, diameter);
-            collision = verifyCollisionOnStart(position, diameter);
+            position = getRandomCoordinates(length, width);
+            collision = verifyCollisionOnStart(position);
         }
         
         balls[i] = new Ball(position[0],position[1],diameter,paintJob);
@@ -53,8 +53,6 @@ function createScene() {
         scene.add(balls[i]);
         
     }
-
-    //scene.add(new THREE.AxisHelper(10));
 
     createCamera1();
     createCamera2();
@@ -66,6 +64,11 @@ function createScene() {
     scene.add(field);
 
     balls[0].add(camera3);
+    scene.traverse(function (node) {
+        if (node instanceof THREE.AxisHelper) {
+            node.visible = !node.visible;
+        }
+    });
 }
 
 
@@ -154,28 +157,42 @@ function onResize() {
 }
 
 
-function getCoordinates(length,width,diameter){
+function getRandomCoordinates(length,width){
     var randomX, randomZ;
-    randomX = Math.floor(Math.random()*(length-diameter)) - (length-diameter)/2;
-    randomZ = Math.floor(Math.random()*(width-diameter)) - (width-diameter)/2; 
+    randomX = Math.random()*(length-diameter) - (length-diameter)/2;
+    randomZ = Math.random()*(width-diameter) - (width-diameter)/2; 
     return [randomX, randomZ];
 }
 
 
-function verifyCollisionOnStart(position, diameter){
-    var i,x,z,res,aux;
+function verifyCollisionOnStart(position){
+    var i, x, z, radiusSum, centerDistance;
 
     x   = position[0];
     z   = position[1];
-    res = diameter**2;
+    radiusSum  = diameter**2;
+    ballsLength = balls.length;
     
-    for(i=0; i<balls.length; i++){
-        aux = (x-balls[i].position.x)**2 + (z-balls[i].position.z)**2;
-        if(res >= aux){
+    for(i=0; i<ballsLength; i++){
+        centerDistance = (x-balls[i].position.x)**2 + (z-balls[i].position.z)**2;
+         if( radiusSum  >= centerDistance){
             return true;
         }
     }
     return false;
+}
+
+function hasCollision(){
+    var i;
+
+    ballsLength = balls.length;
+    
+    for(i=0; i<ballsLength; i++){
+        if(length/2 - diameter/2 >= balls[i].position.x >= - length/2 + diameter/2 ||
+            width/2 - diameter/2 >= balls[i].position.z >= - width/2 + diameter/2){
+                balls[i].userData.velocity = 0;
+            }
+    }
 }
 
 
@@ -205,16 +222,24 @@ function init() {
 function animate() {
     'use strict';
 
+    var i;
+
     // UPDATE //
 
     if(camera == camera3){
-        balls[0].children[2].position.x = -diameter;
+        balls[0].children[2].position.x = -diameter*1.5;
         balls[0].children[2].position.z = 0;
-        camera.lookAt(balls[0].position);
+        camera.lookAt(scene.position);
     }
 
     else{
         camera.lookAt(scene.position);
+    }
+
+    ballsLength = balls.length;
+
+    for(i=0; i<ballsLength; i++){
+        balls[i].translateX(balls[i].userData.velocity);
     }
 
     // DISPLAY //

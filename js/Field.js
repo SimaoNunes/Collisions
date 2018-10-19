@@ -18,7 +18,7 @@ class Field extends THREE.Object3D{
     
         'use strict'
 
-        material = new THREE.MeshBasicMaterial({color: 0x0d4c02, wireframe: true});
+        material = new THREE.MeshBasicMaterial({color: 0x0d4c02, wireframe: false});
 
         var height = (Math.sqrt(Math.pow(length,2) + Math.pow(width,2)))/10;
 
@@ -51,7 +51,7 @@ class Wall extends THREE.Object3D{
     
         'use strict';
         
-        material = new THREE.MeshBasicMaterial({color: 0xf2b02b, wireframe: true});
+        material = new THREE.MeshBasicMaterial({color: 0xf2b02b, wireframe: false});
         geometry = new THREE.BoxGeometry(width, height, length)
         mesh = new THREE.Mesh(geometry, material);
         this.add(mesh);
