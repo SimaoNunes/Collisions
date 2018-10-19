@@ -14,6 +14,7 @@ var delta; // variavel relativa a passagem do tempo
 
 
 
+
 function createScene() {
     'use strict';
 
@@ -46,7 +47,11 @@ function createScene() {
         }
         
         balls[i] = new Ball(position[0],position[1],diameter,paintJob);
+
+        balls[i].userData.direction = new THREE.Vector3(Math.random(),0,Math.random());
+        
         scene.add(balls[i]);
+        
     }
 
     //scene.add(new THREE.AxisHelper(10));
