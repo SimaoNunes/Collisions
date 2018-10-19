@@ -15,8 +15,6 @@ var delta; // variavel relativa a passagem do tempo
 var ballsLength = 10;   //numero de bolas
 
 
-
-
 function createScene() {
     'use strict';
 
@@ -52,8 +50,10 @@ function createScene() {
         
         scene.add(balls[i]);
 
-        balls[i].rotateY(Math.random()*Math.PI*2);
-        
+        var jesus                = Math.random()*Math.PI*2;
+        balls[i].userData.angle  = jesus; 
+
+        balls[i].rotateY(jesus);        
     }
 
     createCamera1();
@@ -184,15 +184,58 @@ function verifyCollisionOnStart(position){
 }
 
 function hasCollision(){
-    var i, radius;
+    var i, radius,pi,x,z;
+    
+    pi = Math.PI;
     radius = diameter/2;
 
     for(i=0; i<ballsLength; i++){
-        if(Math.abs(balls[i].position.x) >= (length/2)-radius || Math.abs(balls[i].position.z) >= (width/2)-radius){
-            balls[i].userData.velocity = 0;
+
+        ball   = balls[i];
+        angle  = ball.userData.angle;
+        x      = ball.position.x;
+        z      = ball.position.z;
+        limitZ = (width/2)-radius;
+        limitX = (length/2)-radius;
+
+        // limite superior
+        if( z <= -1*limitZ || z >= limitZ ){
+            if( 0 <= angle && angle <= pi){
+                balls[i].rotateY(-2*angle);
+                balls[i].userData.angle = 2*pi-angle;
+            }
+        }
+        // limite inferior
+        if( z >= limitZ){
+            if( pi <= angle && angle <= 2*pi){
+                balls[i].rotateY(2*(2*pi - angle));
+                balls[i].userData.angle = 2*pi - angle;
+            }
+        }
+        //limite direito
+        if( x >= limitX){
+            balls[i].rotateY(pi-2*angle);
+            if( 0 <= angle && angle <= pi/2 ){
+                balls[i].userData.angle = pi - angle;
+            }
+            if((3/4)*pi <= angle && angle <= 2*pi){
+                balls[i].userData.angle = 2*pi-angle+pi;
+            }
+        }
+        //limite esquerdo
+        if( x <= -1*limitX){
+            if( angle <= pi ){
+                balls[i].rotateY(pi-2*angle);
+                balls[i].userData.angle = pi - angle;
+            }
+            if( pi <= angle){
+                balls[i].rotateY(-2*angle+pi);
+                balls[i].userData.angle = 2*pi - angle + pi;
+            }
         }
     }
 }
+
 
 
 function render() {
