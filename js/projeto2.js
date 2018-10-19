@@ -33,7 +33,7 @@ function createScene() {
 
     var paintJob;
 
-    for(i=0; i<1; i++){
+    for(i=0; i<10; i++){
 
         if(i == 0){paintJob = 0xff0000;}
         else{paintJob = 0x9b9da0}
@@ -47,10 +47,10 @@ function createScene() {
         }
         
         balls[i] = new Ball(position[0],position[1],diameter,paintJob);
-
-        balls[i].userData.direction = new THREE.Vector3(Math.random(),0,Math.random());
         
         scene.add(balls[i]);
+
+        balls[i].rotateY(Math.random()*Math.PI*2);
         
     }
 
@@ -240,7 +240,7 @@ function animate() {
 
     for(i=0; i<ballsLength; i++){
         balls[i].translateX(balls[i].userData.velocity);
-    }
+    }   
 
     // DISPLAY //
 

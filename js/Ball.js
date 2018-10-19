@@ -7,13 +7,11 @@ class Ball extends THREE.Object3D{
 
         super();
 
-        this.userData = { direction: new THREE.Vector3(1,0,0)}
+        this.userData = {velocity : 0.1}
 
         this.position.x = x;
         this.position.y = (diameter/2)+0.5;
         this.position.z = z;
-
-        this.userData = {velocity : 0.1};
     
         material = new THREE.MeshBasicMaterial({color: paint, wireframe: false});
         geometry = new THREE.SphereGeometry(diameter/2, 10, 10)
