@@ -14,6 +14,9 @@ var delta; // variavel relativa a passagem do tempo
 
 var ballsLength = 10;   //numero de bolas
 
+var onCollision = [];
+
+var combinations = getCombinations(ballsLength);
 
 function createScene() {
     'use strict';
@@ -72,8 +75,6 @@ function createScene() {
         }
     });
 }
-
-
 
 function createCamera1() {
     'use strict';
@@ -183,17 +184,32 @@ function verifyCollisionOnStart(position){
     return false;
 }
 
+function getCombinations(n){
+    var combinations = [];
+    var seq = [];
+    for(var i = 0; i < n; i++){seq.push(i);}
+    for(var i=0; i < seq.length; i++){
+        for(var j=i+1; j < seq.length; j++){
+            combinations.push([seq[i],seq[j]])
+        }
+    }
+    return combinations
+}
+
 function hasCollision(){
-    var i, radius,pi,x,z;
-    pi = Math.PI;
+
+    var i, radius,x,z;
+    
     radius = diameter/2;
+
     for(i=0; i<ballsLength; i++){
         // variaveis auxiliares
         angle  = balls[i].userData.angle;
-        x      = balls[i].position.x;
-        z      = balls[i].position.z;
+        x      = balls[i].position.x + balls[i].userData.direction[0]*balls[i].userData.velocity;
+        z      = balls[i].position.z + balls[i].userData.direction[0]*balls[i].userData.velocity;
         limitZ = (width/2)-radius;
         limitX = (length/2)-radius;
+
         // limite superior e inferior
         if( Math.abs(z) >= limitZ ){
             balls[i].userData.direction[1] = -balls[i].userData.direction[1];
@@ -203,9 +219,31 @@ function hasCollision(){
             balls[i].userData.direction[0] = -balls[i].userData.direction[0];
         }
     }
+
+    // restantes bolas   
+    if(combinations.length!=0){
+        for(var j=0; j<combinations.length; j++){
+            
+            var comb = combinations[j];
+            var BallIndex1 = comb[0];
+            var BallIndex2 = comb[1];
+
+            var radiusSum  = diameter**2;
+            var x = balls[BallIndex1].position.x;
+            var z = balls[BallIndex1].position.z;
+
+            var centerDistance = (x-balls[BallIndex2].position.x)**2 + (z-balls[BallIndex2].position.z)**2;
+
+            if( radiusSum  >= centerDistance ){
+                console.log('s')
+                var iDirection = balls[BallIndex1].userData.direction;
+                var jDirection = balls[BallIndex2].userData.direction;
+                balls[BallIndex1].userData.direction = jDirection;
+                balls[BallIndex2].userData.direction = iDirection;
+            }
+        }
+    }
 }
-
-
 
 function render() {
     'use strict';
@@ -242,21 +280,18 @@ function animate() {
         balls[0].children[2].position.z = 0;
         camera.lookAt(scene.position);
     }
-
     else{
         camera.lookAt(scene.position);
     }
 
-    ballsLength = balls.length;
-
     for(i=0; i < ballsLength; i++){
-        // balls[i].translateX(balls[i].userData.velocity);
         balls[i].position.x = balls[i].position.x + balls[i].userData.direction[0]*balls[i].userData.velocity;
         balls[i].position.z = balls[i].position.z + balls[i].userData.direction[1]*balls[i].userData.velocity;
     }   
 
-    hasCollision();
 
+    hasCollision();
+    
     // DISPLAY //
 
     render();
