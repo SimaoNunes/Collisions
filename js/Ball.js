@@ -9,14 +9,16 @@ class Ball extends THREE.Object3D{
 
         var dir = new THREE.Vector3(1,0,0);
 
-        this.userData = {velocity : speed, direction : dir}
+        var per = new THREE.Vector3(0,0,1);
+
+        this.userData = {velocity : speed, direction : dir, perpendicular : per}
 
         this.position.x = x;
         this.position.y = (diameter/2)+0.5;
         this.position.z = z;
     
         material = new THREE.MeshBasicMaterial({color: paint, wireframe: false});
-        geometry = new THREE.SphereGeometry(diameter/2, 30, 30)
+        geometry = new THREE.SphereGeometry(diameter/2, 30, 30);
         mesh = new THREE.Mesh(geometry, material);
         this.add(mesh);
 
