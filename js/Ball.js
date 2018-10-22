@@ -4,7 +4,6 @@ class Ball extends THREE.Object3D{
 
     constructor(x,z,diameter,paint){
         'use strict'
-
         super();
 
         var speed = new THREE.Vector3(1,0,0);

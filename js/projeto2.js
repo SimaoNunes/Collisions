@@ -69,7 +69,6 @@ function createScene() {
     createCamera1();
     createCamera2();
     createCamera3();
-
     camera = camera1;
 
     scene.add(camera);
