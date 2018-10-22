@@ -1,3 +1,4 @@
+
 /*Classe das bolas que se moverão dentro da caixa*/
 
 class Ball extends THREE.Object3D{
@@ -7,19 +8,26 @@ class Ball extends THREE.Object3D{
 
         super();
 
-        this.userData = { velocity : 10, 
-                          direction: [THREE.Math.randFloat(-1,1), THREE.Math.randFloat(-1,1)]
-        }
+        var speed = new THREE.Vector3(1,0,0);
+
+        speed.multiplyScalar(Math.random()*5+2);
+
+        this.userData = {velocity : speed}
 
         this.position.x = x;
         this.position.y = (diameter/2)+0.5;
         this.position.z = z;
     
-        material = new THREE.MeshBasicMaterial({color: paint, wireframe: false});
-        geometry = new THREE.SphereGeometry(diameter/2, 30, 30)
+        material = new THREE.MeshBasicMaterial({color: paint, wireframe: true});
+        geometry = new THREE.SphereGeometry(diameter/2, 30, 30);
         mesh = new THREE.Mesh(geometry, material);
-        this.add(mesh);
 
+        var smallGeometry = new THREE.SphereGeometry(diameter/4, 8, 8);
+        var smallMesh = new THREE.Mesh(smallGeometry, material);
+        
+        this.add(smallMesh);
+        this.add(mesh);
         this.add(new THREE.AxisHelper(8));
+
     }
 }
