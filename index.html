@@ -7,8 +7,13 @@
         <style>
             body {
                 margin: 0px;
-                background-color: #fff;
+                background-color: black;
                 overflow: hidden;
+            }
+            h2{
+                color: white;
+                text-align: center;
+                font-family: 'Courier New', Courier, monospace;
             }
         </style>
         <script src="js/three.js"></script>
@@ -17,9 +22,13 @@
         <script src="js/projeto2.js"></script>
     </head>
     <body>
-        <script>
-            init();
-            animate();
-        </script>
+        <h2>Keys: A - Wireframe (On/Off); E - Display Axis; 1,2,3 - Change Cameras</h2>
+        <div class='board'>
+            <script>
+                init();
+                animate();
+            </script>
+        </div>
+        
     </body>
 </html>
