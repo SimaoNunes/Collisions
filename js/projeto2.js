@@ -301,8 +301,9 @@ function init() {
     time = 0;
     
     createScene();
-
     render();
+
+    clock = new THREE.Clock(); 
 
     window.addEventListener("resize", onResize);
     window.addEventListener("keydown", onKeyDown);

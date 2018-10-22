@@ -21,10 +21,13 @@ class Ball extends THREE.Object3D{
         material = new THREE.MeshBasicMaterial({color: paint, wireframe: false});
         geometry = new THREE.SphereGeometry(diameter/2, 6, 6);
         mesh = new THREE.Mesh(geometry, material);
+
         var smallGeometry = new THREE.SphereGeometry(diameter/4, 8, 8);
         var smallMesh = new THREE.Mesh(smallGeometry, material);
+        
         this.add(smallMesh);
         this.add(mesh);
         this.add(new THREE.AxisHelper(8));
+
     }
 }
