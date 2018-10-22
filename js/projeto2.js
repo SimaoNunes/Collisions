@@ -12,7 +12,7 @@ var geometry, material, mesh;
 
 var delta, time; // variavel relativa a passagem do tempo
 
-var ballsLength = 11;  //numero de bolas
+var ballsLength = 10;  //numero de bolas
 
 var onCollision = [];
 
@@ -60,7 +60,7 @@ function createScene() {
         var angle = Math.random()*Math.PI*2
 
         balls[i].children[1].rotateY(angle);
-        balls[i].children[2].rotateY(angle);    
+        balls[i].children[2].rotateY(angle);
         
         balls[i].userData.velocity.applyAxisAngle(axisY,angle);
 
@@ -122,11 +122,10 @@ function onKeyDown(e) {
     switch (e.keyCode) {
     case 65: //A
     case 97: //a
-        scene.traverse(function (node) {
-            if (node instanceof THREE.Mesh) {
-                node.material.wireframe = !node.material.wireframe;
-            }
-        });
+    var i;
+    for(i=0; i<ballsLength; i++){
+        balls[i].children[1].material.wireframe = !balls[i].children[1].material.wireframe;
+    }
         break;
     case 69:  //E
     case 101: //e
@@ -224,6 +223,7 @@ function hasCollision(){
                             balls[i].userData.velocity.getComponent(1),
                             balls[i].userData.velocity.getComponent(2));
             newVector.applyAxisAngle(axisY, -Math.PI/2);
+            balls[i].children[0].lookAt(newVector);
             balls[i].children[2].lookAt(newVector);
             balls[i].children[1].lookAt(newVector);          
         }
@@ -234,8 +234,9 @@ function hasCollision(){
                             balls[i].userData.velocity.getComponent(1),
                             balls[i].userData.velocity.getComponent(2));
             newVector.applyAxisAngle(axisY, -Math.PI/2);
+            balls[i].children[0].lookAt(newVector);
             balls[i].children[2].lookAt(newVector);
-            balls[i].children[1].lookAt(newVector); 
+            balls[i].children[1].lookAt(newVector);
         }
     }
 
@@ -319,11 +320,10 @@ function animate() {
 
     time += delta;
 
-    if(time == 0.00000000001){
-        console.log('asf');
+    if(time >= 60){
         time = 0;
         for(i=0; i < ballsLength; i++){
-            balls[i].userData.velocity.multiplyScalar(5);
+            balls[i].userData.velocity.multiplyScalar(2);
         }
     }
 
@@ -331,10 +331,20 @@ function animate() {
 
     hasCollision();
 
+    var radius = diameter/2;
+
+    limitZ  = (width/2)-radius;
+    limitX  = (length/2)-radius;
+
+
     for(i=0; i < ballsLength; i++){
+        var xTry   = balls[i].position.x + balls[i].userData.velocity.getComponent(0)*(delta);
+        var zTry   = balls[i].position.z + balls[i].userData.velocity.getComponent(2)*(delta);
         balls[i].children[1].rotation.z -= balls[i].userData.velocity.length()*(delta)/(diameter/2);
-        balls[i].position.x += balls[i].userData.velocity.getComponent(0)*(delta);
-        balls[i].position.z += balls[i].userData.velocity.getComponent(2)*(delta);
+        if( Math.abs(xTry) < limitX && Math.abs(zTry) < limitZ){
+            balls[i].position.x += balls[i].userData.velocity.getComponent(0)*(delta);
+            balls[i].position.z += balls[i].userData.velocity.getComponent(2)*(delta);
+        }
     }   
     
     // DISPLAY //

@@ -18,8 +18,8 @@ class Ball extends THREE.Object3D{
         this.position.y = (diameter/2)+0.5;
         this.position.z = z;
     
-        material = new THREE.MeshBasicMaterial({color: paint, wireframe: true});
-        geometry = new THREE.SphereGeometry(diameter/2, 30, 30);
+        material = new THREE.MeshBasicMaterial({color: paint, wireframe: false});
+        geometry = new THREE.SphereGeometry(diameter/2, 6, 6);
         mesh = new THREE.Mesh(geometry, material);
         var smallGeometry = new THREE.SphereGeometry(diameter/4, 8, 8);
         var smallMesh = new THREE.Mesh(smallGeometry, material);
