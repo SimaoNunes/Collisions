@@ -7,7 +7,9 @@ class Ball extends THREE.Object3D{
 
         super();
 
-        this.userData = { collidingWith:0, velocity : 0.2, angle : 0, direction: [ THREE.Math.randFloat(-1,1), THREE.Math.randFloat(-1,1)]}
+        this.userData = { velocity : 0.2, 
+                          direction: [THREE.Math.randFloat(-1,1), THREE.Math.randFloat(-1,1)]
+        }
 
         this.position.x = x;
         this.position.y = (diameter/2)+0.5;

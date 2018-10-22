@@ -12,7 +12,7 @@ var geometry, material, mesh;
 
 var delta; // variavel relativa a passagem do tempo
 
-var ballsLength = 10;   //numero de bolas
+var ballsLength = 11;  //numero de bolas
 
 var onCollision = [];
 
@@ -204,9 +204,8 @@ function hasCollision(){
 
     for(i=0; i<ballsLength; i++){
         // variaveis auxiliares
-        angle  = balls[i].userData.angle;
         x      = balls[i].position.x + balls[i].userData.direction[0]*balls[i].userData.velocity;
-        z      = balls[i].position.z + balls[i].userData.direction[0]*balls[i].userData.velocity;
+        z      = balls[i].position.z + balls[i].userData.direction[1]*balls[i].userData.velocity;
         limitZ = (width/2)-radius;
         limitX = (length/2)-radius;
 
@@ -229,13 +228,16 @@ function hasCollision(){
             var BallIndex2 = comb[1];
 
             var radiusSum  = diameter**2;
-            var x = balls[BallIndex1].position.x;
-            var z = balls[BallIndex1].position.z;
 
-            var centerDistance = (x-balls[BallIndex2].position.x)**2 + (z-balls[BallIndex2].position.z)**2;
+            var x1 = balls[BallIndex1].position.x + balls[BallIndex1].userData.direction[0]*balls[BallIndex1].userData.velocity;
+            var z1 = balls[BallIndex1].position.z + balls[BallIndex1].userData.direction[1]*balls[BallIndex1].userData.velocity;
+            
+            var x2 = balls[BallIndex2].position.x + balls[BallIndex2].userData.direction[0]*balls[BallIndex2].userData.velocity;
+            var z2 = balls[BallIndex2].position.z + balls[BallIndex2].userData.direction[1]*balls[BallIndex2].userData.velocity;
+
+            var centerDistance = (x1-x2)**2 + (z1-z2)**2;
 
             if( radiusSum  >= centerDistance ){
-                console.log('s')
                 var iDirection = balls[BallIndex1].userData.direction;
                 var jDirection = balls[BallIndex2].userData.direction;
                 balls[BallIndex1].userData.direction = jDirection;
@@ -284,9 +286,16 @@ function animate() {
         camera.lookAt(scene.position);
     }
 
+  
+    var vecX, vecZ;
     for(i=0; i < ballsLength; i++){
         balls[i].position.x = balls[i].position.x + balls[i].userData.direction[0]*balls[i].userData.velocity;
         balls[i].position.z = balls[i].position.z + balls[i].userData.direction[1]*balls[i].userData.velocity;
+        vecX = balls[i].userData.direction[0];
+        vecZ = balls[i].userData.direction[1];
+        // console.log(vecX);
+        // console.log(vecZ);
+        // balls[i].rotateOnAxis( new THREE.Vector3(1, 0,0), 0.5);
     }   
 
 
