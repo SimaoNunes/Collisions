@@ -1,3 +1,3 @@
 # Projeto_CG
--Colisões-
+--Colisões--
 Projeto de Computação Gráfica: Segunda Entrega
