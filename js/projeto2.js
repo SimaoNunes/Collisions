@@ -148,14 +148,6 @@ function onKeyDown(e) {
     }
 }
 
-
-function onKeyUp(e) {
-    'use strict';
-    switch (e.keyCode) {
-    }
-}
-
-
 function onResize() {
     'use strict';
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -165,14 +157,12 @@ function onResize() {
     }
 }
 
-
 function getRandomCoordinates(length,width){
     var randomX, randomZ;
     randomX = Math.random()*(length-diameter) - (length-diameter)/2;
     randomZ = Math.random()*(width-diameter) - (width-diameter)/2; 
     return [randomX, randomZ];
 }
-
 
 function verifyCollisionOnStart(position){
     var i, x, z, radiusSum, centerDistance;
@@ -190,7 +180,6 @@ function verifyCollisionOnStart(position){
     return false;
 }
 
-
 function getCombinations(n){
     var combinations = [];
     var seq = [];
@@ -202,7 +191,6 @@ function getCombinations(n){
     }
     return combinations
 }
-
 
 function hasCollision(){
 
