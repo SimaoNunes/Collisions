@@ -7,7 +7,7 @@ class Ball extends THREE.Object3D{
 
         super();
 
-        this.userData = { velocity : 0.2, 
+        this.userData = { velocity : 10, 
                           direction: [THREE.Math.randFloat(-1,1), THREE.Math.randFloat(-1,1)]
         }
 

@@ -12,7 +12,7 @@ var geometry, material, mesh;
 
 var delta; // variavel relativa a passagem do tempo
 
-var ballsLength = 11;  //numero de bolas
+var ballsLength = 1;  //numero de bolas
 
 var onCollision = [];
 
@@ -56,7 +56,7 @@ function createScene() {
         var jesus                = Math.random()*Math.PI*2;
         balls[i].userData.angle  = jesus; 
 
-        balls[i].rotateY(jesus);        
+        balls[i].rotateY(correctAxis(balls[i].userData.direction));
     }
 
     createCamera1();
@@ -204,8 +204,8 @@ function hasCollision(){
 
     for(i=0; i<ballsLength; i++){
         // variaveis auxiliares
-        x      = balls[i].position.x + balls[i].userData.direction[0]*balls[i].userData.velocity;
-        z      = balls[i].position.z + balls[i].userData.direction[1]*balls[i].userData.velocity;
+        x      = balls[i].position.x + balls[i].userData.direction[0]*balls[i].userData.velocity*(delta);
+        z      = balls[i].position.z + balls[i].userData.direction[1]*balls[i].userData.velocity*(delta);
         limitZ = (width/2)-radius;
         limitX = (length/2)-radius;
 
@@ -229,11 +229,11 @@ function hasCollision(){
 
             var radiusSum  = diameter**2;
 
-            var x1 = balls[BallIndex1].position.x + balls[BallIndex1].userData.direction[0]*balls[BallIndex1].userData.velocity;
-            var z1 = balls[BallIndex1].position.z + balls[BallIndex1].userData.direction[1]*balls[BallIndex1].userData.velocity;
+            var x1 = balls[BallIndex1].position.x + balls[BallIndex1].userData.direction[0]*balls[BallIndex1].userData.velocity*(delta);
+            var z1 = balls[BallIndex1].position.z + balls[BallIndex1].userData.direction[1]*balls[BallIndex1].userData.velocity*(delta);
             
-            var x2 = balls[BallIndex2].position.x + balls[BallIndex2].userData.direction[0]*balls[BallIndex2].userData.velocity;
-            var z2 = balls[BallIndex2].position.z + balls[BallIndex2].userData.direction[1]*balls[BallIndex2].userData.velocity;
+            var x2 = balls[BallIndex2].position.x + balls[BallIndex2].userData.direction[0]*balls[BallIndex2].userData.velocity*(delta);
+            var z2 = balls[BallIndex2].position.z + balls[BallIndex2].userData.direction[1]*balls[BallIndex2].userData.velocity*(delta);
 
             var centerDistance = (x1-x2)**2 + (z1-z2)**2;
 
@@ -245,6 +245,25 @@ function hasCollision(){
             }
         }
     }
+}
+
+function correctAxis(vec){
+    var x = vec[0];
+    var z = vec[1];
+
+    if(z>=0 && x>=0){
+        return Math.atan(x/z);
+    }
+    else if(z>=0 && x<=0){
+        return -Math.atan(x/z);
+    }
+    else if(x<=0 && z>=0){
+        return -Math.atan(x/z);
+    }
+    else{
+        return Math.PI + Math.atan(x/z)
+    }
+
 }
 
 function render() {
@@ -262,8 +281,10 @@ function init() {
     document.body.appendChild(renderer.domElement);
     
     createScene();
-
+    //CONA
     render();
+
+    clock = new THREE.Clock(); 
 
     window.addEventListener("resize", onResize);
     window.addEventListener("keydown", onKeyDown);
@@ -277,20 +298,16 @@ function animate() {
 
     // UPDATE //
 
-    if(camera == camera3){
-        balls[0].children[2].position.x = -diameter*1.5;
-        balls[0].children[2].position.z = 0;
-        camera.lookAt(scene.position);
-    }
-    else{
-        camera.lookAt(scene.position);
-    }
+    camera.lookAt(scene.position);
 
-  
+    delta = clock.getDelta();
+
     var vecX, vecZ;
+    var q = new THREE.Quaternion();
+
     for(i=0; i < ballsLength; i++){
-        balls[i].position.x = balls[i].position.x + balls[i].userData.direction[0]*balls[i].userData.velocity;
-        balls[i].position.z = balls[i].position.z + balls[i].userData.direction[1]*balls[i].userData.velocity;
+        balls[i].position.x += balls[i].userData.direction[0]*balls[i].userData.velocity*(delta);
+        balls[i].position.z += balls[i].userData.direction[1]*balls[i].userData.velocity*(delta);
         vecX = balls[i].userData.direction[0];
         vecZ = balls[i].userData.direction[1];
         // console.log(vecX);
