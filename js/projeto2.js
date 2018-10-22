@@ -12,7 +12,7 @@ var geometry, material, mesh;
 
 var delta; // variavel relativa a passagem do tempo
 
-var ballsLength = 10;   //numero de bolas
+var ballsLength = 11;  //numero de bolas
 
 var onCollision = [];
 
