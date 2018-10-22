@@ -10,7 +10,7 @@ var length, width, diameter; // comprimento e largura do campo e diametro da bol
 
 var geometry, material, mesh;
 
-var delta; // variavel relativa a passagem do tempo
+var delta, time; // variavel relativa a passagem do tempo
 
 var ballsLength = 10;  //numero de bolas
 
@@ -296,6 +296,8 @@ function init() {
     document.body.appendChild(renderer.domElement);
 
     clock = new THREE.Clock();
+
+    time = 0;
     
     createScene();
     render();
@@ -315,6 +317,16 @@ function animate() {
     // UPDATE //
 
     delta = clock.getDelta();
+
+    time += delta;
+
+    if(time == 0.00000000001){
+        console.log('asf');
+        time = 0;
+        for(i=0; i < ballsLength; i++){
+            balls[i].userData.velocity.multiplyScalar(5);
+        }
+    }
 
     camera.lookAt(scene.position);
 
