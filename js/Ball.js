@@ -1,4 +1,3 @@
-
 /*Classe das bolas que se moverão dentro da caixa*/
 
 class Ball extends THREE.Object3D{

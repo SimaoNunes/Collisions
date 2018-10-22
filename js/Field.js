@@ -35,8 +35,6 @@ class Field extends THREE.Object3D{
         this.add(wallTop);
         this.add(wallRight);
         this.add(wallBottom);
-
-        //this.add(new THREE.AxisHelper(10));
     }    
 }
 
