@@ -13,7 +13,7 @@ If you downloaded the repo, make sure that there is a browser installed on your 
 
 ```A``` Wireframe(On/Off)
 
-```P``` Axis(On/Off)
+```E``` Axis(On/Off)
 
 ## Technologies Used
 
